@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRYPT — AI Scam & Phishing Detector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">
+      <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <path d="M13 1L24 7V19L13 25L2 19V7L13 1Z" stroke="url(#g)" stroke-width="1.6"/>
+        <path d="M13 6L19 9.5V16.5L13 20L7 16.5V9.5L13 6Z" fill="url(#g)" fill-opacity="0.18" stroke="url(#g)" stroke-width="1.2"/>
+        <circle cx="13" cy="13" r="2.1" fill="url(#g)"/>
+        <defs><linearGradient id="g" x1="2" y1="1" x2="24" y2="25"><stop stop-color="#8B5CF6"/><stop offset="1" stop-color="#22D3EE"/></linearGradient></defs>
+      </svg>
+    </span>
+    <span class="brand-name">KRYPT</span>
+    <span class="live-dot" title="Live"></span>
+  </div>
+  <button id="keyBtn" class="ghost-btn" type="button">🔑 API Key</button>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="eyebrow">SIH 2026 · Real-Time AI/ML Phishing Detection · MVP</p>
+    <h1>Paste a message.<br><span class="grad-text">Unmask the scam.</span></h1>
+    <p class="sub">Built for the scams actually hitting Indian inboxes — fake UPI requests, courier holds, KYC threats, digital-arrest calls — analysed instantly by AI, explained in plain language.</p>
+    <div class="hero-badges">
+      <span class="badge">🇮🇳 India-pattern tuned</span>
+      <span class="badge">⚡ Instant verdict</span>
+      <span class="badge">🧠 AI-reasoned, not blacklist</span>
+    </div>
+  </section>
+
+  <section class="console" aria-label="Scam checker">
+    <div class="console-head">
+      <span class="dot dot-a"></span><span class="dot dot-b"></span><span class="dot dot-c"></span>
+      <span class="console-title">check.input</span>
+    </div>
+
+    <textarea id="inputText" rows="6" placeholder="Paste an SMS, WhatsApp message, email, or URL here…"></textarea>
+
+    <div class="examples">
+      <span class="examples-label">Try:</span>
+      <button class="chip" data-sample="phish1" type="button">Fake bank KYC</button>
+      <button class="chip" data-sample="phish2" type="button">Courier scam (Hinglish)</button>
+      <button class="chip" data-sample="safe1" type="button">A safe message</button>
+    </div>
+
+    <button id="analyzeBtn" class="primary-btn" type="button">
+      <span id="analyzeLabel">Analyse</span>
+    </button>
+
+    <p id="statusMsg" class="status-msg" role="status"></p>
+  </section>
+
+  <section id="resultSection" class="result hidden" aria-live="polite">
+    <div class="result-head">
+      <span id="verdictIcon" class="verdict-icon">—</span>
+      <div>
+        <h2 id="verdictText">—</h2>
+        <p id="confidenceText" class="confidence-text">—</p>
+      </div>
+    </div>
+
+    <div class="result-body">
+      <div class="flags-block">
+        <h3>Red flags</h3>
+        <ul id="flagsList"></ul>
+      </div>
+      <div class="explain-block">
+        <h3>Why</h3>
+        <p id="explainText"></p>
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer">⚠️ Decision-support tool only — always use your own judgement. Not a substitute for official bank/police verification.</p>
+
+</main>
+
+<!-- API key modal -->
+<div id="keyModal" class="modal hidden">
+  <div class="modal-card">
+    <h3>Connect your API key</h3>
+    <p>Stored only in this browser (localStorage) — never sent anywhere except directly to Anthropic's API.</p>
+    <input id="apiKeyInput" type="password" placeholder="sk-ant-...">
+    <div class="modal-actions">
+      <button id="saveKeyBtn" class="primary-btn" type="button">Save</button>
+      <button id="closeKeyBtn" class="ghost-btn" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
