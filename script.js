@@ -5,12 +5,12 @@
    HOW THIS WORKS
    ---------------
    Pure client-side app (HTML/CSS/JS). No backend server, no database.
-   The browser calls Anthropic's Claude API directly using the
-   "anthropic-dangerous-direct-browser-access" header, which Anthropic
-   provides specifically for "bring your own API key" style tools like this.
+   The browser calls Google's Gemini API directly (free tier via Google AI
+   Studio, no credit card needed), using the same "bring your own API key"
+   pattern.
 
    The user's API key is entered once, stored only in this browser's
-   localStorage, and sent straight to Anthropic — it never touches any
+   localStorage, and sent straight to the AI provider — it never touches any
    server of ours. This is why there's no backend in this MVP.
 
    KNOWN LIMITATION (say this plainly if judges ask):
@@ -20,8 +20,8 @@
    version would add a small backend to hide the key — see README roadmap.
    ========================================================================= */
 
-const API_URL = "https://api.anthropic.com/v1/messages";
-const MODEL = "claude-sonnet-5"; // check docs.claude.com for the current model id
+const API_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
+const MODEL = "gemini-2.5-flash"; // free-tier model — check ai.google.dev for the current free model id
 
 const SYSTEM_PROMPT = `You are a cybersecurity analyst specialising in phishing and scam
 detection for Indian users. You will be given a piece of content: a URL, an SMS,
@@ -130,7 +130,7 @@ async function analyse() {
   statusMsg.textContent = "Analysing…";
 
   try {
-    const result = await callClaude(content, apiKey);
+    const result = await callAI(content, apiKey);
     renderResult(result);
     statusMsg.textContent = "";
   } catch (err) {
@@ -146,20 +146,18 @@ function setLoading(isLoading) {
   analyzeLabel.textContent = isLoading ? "Analysing…" : "Analyse";
 }
 
-async function callClaude(content, apiKey) {
-  const response = await fetch(API_URL, {
+async function callAI(content, apiKey) {
+  const url = `${API_URL_BASE}/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      "x-api-key": apiKey,
-      "anthropic-version": "2023-06-01",
-      "anthropic-dangerous-direct-browser-access": "true",
     },
     body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 500,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: `Analyse this content:\n\n${content}` }],
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: [
+        { role: "user", parts: [{ text: `Analyse this content:\n\n${content}` }] },
+      ],
     }),
   });
 
@@ -169,7 +167,7 @@ async function callClaude(content, apiKey) {
   }
 
   const data = await response.json();
-  const text = data.content.map((b) => (b.type === "text" ? b.text : "")).join("");
+  const text = data.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("") || "";
   return parseModelJson(text);
 }
 
