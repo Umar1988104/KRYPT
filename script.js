@@ -21,7 +21,7 @@
    ========================================================================= */
 
 const API_URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const MODEL = "gemini-2.5-flash"; // free-tier model — check ai.google.dev for the current free model id
+const MODEL = "gemini-3.6-flash"; // free-tier model — check ai.google.dev for the current free model id
 
 const SYSTEM_PROMPT = `You are a cybersecurity analyst specialising in phishing and scam
 detection for Indian users. You will be given a piece of content: a URL, an SMS,
